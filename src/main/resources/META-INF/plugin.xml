@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.sercapnp</id>
     <name>SerCapnp</name>
-    <version>4.1</version>
+    <version>4.2</version>
     <vendor email="xmonader@gmail.com" url="https://github.com/xmonader">xmonader</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,10 @@
 <h3>Features</h3>
 <ul>
   <li><b>Go to definition</b> — Ctrl+Click on any type name to jump to its struct/enum/interface definition, even across imported files</li>
+  <li><b>Syntax validation</b> — field names must start lowercase, type names must start uppercase, import path validation, unused import detection</li>
+  <li><b>Ordinal checks</b> — duplicate ordinal errors, ordinal gap warnings per struct scope</li>
+  <li><b>Structure view</b> — hierarchical view of all definitions with click-to-navigate (Alt+7)</li>
+  <li><b>Gutter icons</b> — struct/enum/interface/const/annotation icons in the editor margin</li>
   <li><b>Shift ordinals down</b> — insert a field in the middle: all subsequent ordinals auto-increment (Ctrl+Alt+A, S)</li>
   <li><b>Shift ordinals up</b> — remove a field from the middle: close the ordinal gap (Ctrl+Alt+A, U)</li>
   <li><b>Ordinal auto-increment</b> — type <code>@</code> after a field name and the next ordinal number is inserted automatically</li>
@@ -26,6 +30,7 @@
 
     <change-notes><![CDATA[
     <ul>
+      <li><b>4.2</b>: Syntax validation (naming rules, import validation, unused imports), ordinal checks (duplicates, gaps), structure view, gutter icons</li>
       <li><b>4.1</b>: Shift ordinals down/up — insert or remove fields in the middle with automatic renumbering (Ctrl+Alt+A, S / U)</li>
       <li><b>4.0</b>: Go to definition (Ctrl+Click cross-file navigation); ordinal auto-increment (@N auto-numbering)</li>
       <li><b>4.0</b>: Code completion — built-in types, keywords, user-defined types from current file and imports, annotation names/targets, constants, import paths</li>
@@ -68,6 +73,15 @@
                 implementation="com.sercapnp.lang.CapnpGotoDeclarationHandler"/>
         <typedHandler
                 implementation="com.sercapnp.lang.CapnpOrdinalTypedHandler"/>
+        <externalAnnotator
+                language="Capnp"
+                implementationClass="com.sercapnp.lang.CapnpAnnotator"/>
+        <lang.psiStructureViewFactory
+                language="Capnp"
+                implementationClass="com.sercapnp.lang.CapnpStructureViewFactory"/>
+        <codeInsight.lineMarkerProvider
+                language="Capnp"
+                implementationClass="com.sercapnp.lang.CapnpLineMarkerProvider"/>
     </extensions>
 
     <actions>
